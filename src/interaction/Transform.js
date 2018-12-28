@@ -442,6 +442,20 @@ ol_interaction_Transform.prototype.handleDownEvent_ = function(evt) {
     this.watchFeatures_();
     this.dispatchEvent({ type:'select', feature: feature, features: this.selection_, pixel: evt.pixel, coordinate: evt.coordinate });
     return false;
+  } else if (this.get('selection')) {
+    if (feature){
+      //if (!this.addFn_(evt)) this.selection_ = [];
+      var index = this.selection_.indexOf(feature);
+      if (index < 0) this.selection_.push(feature);
+      else this.selection_.splice(index,1);
+    } else {
+      this.selection_ = [];
+    }
+    this.ispt_ = this.selection_.length===1 ? (this.selection_[0].getGeometry().getType() == "Point") : false;
+    this.drawSketch_();
+    this.watchFeatures_();
+    this.dispatchEvent({ type:'select', feature: feature, features: this.selection_, pixel: evt.pixel, coordinate: evt.coordinate });
+    return false;
   }
 };
 
